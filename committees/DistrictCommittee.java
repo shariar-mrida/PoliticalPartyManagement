@@ -23,6 +23,11 @@ public class DistrictCommittee extends Committee implements CommitteeOperations 
     public void addMember(Member m) {
         member.add(m);
     }
+    public void addMember(Member m, Role role, CommitteeLevel level){
+        m.setRole(role);
+        m.setCommitteeLevel(level);
+        member.add(m);
+    }
     public boolean removeMember(Member m) {
         return member.remove(m);
     }
@@ -33,7 +38,11 @@ public class DistrictCommittee extends Committee implements CommitteeOperations 
     public void addLeader(Member m) {
         districtCommitteeleader.add(m);
     }
-
+    public void addLeader(Member m, Role role, CommitteeLevel level){
+        m.setRole(role);
+        m.setCommitteeLevel(level);
+        districtCommitteeleader.add(m);
+    }
     @Override
     public boolean removeLeader(Member m) {
         return districtCommitteeleader.remove(m);

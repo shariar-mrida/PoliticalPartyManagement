@@ -37,7 +37,11 @@ public class CentralCommittee extends Committee implements CommitteeOperations {
     public void addLeader(Member m) {
         centralCommitteeLeader.add(m);
     }
-
+    public void addLeader(Member m, Role role, CommitteeLevel level){
+        m.setRole(role);
+        m.setCommitteeLevel(level);
+        centralCommitteeLeader.add(m);
+    }
     @Override
     public boolean removeLeader(Member m) {
         return centralCommitteeLeader.remove(m);
