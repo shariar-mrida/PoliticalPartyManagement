@@ -16,6 +16,7 @@ public class PartySystem{
 
     private static final String MEMBERS_FILE = "data\\data_members.csv";
     private static final String PENDING_FILE = "data\\data_pending.csv";
+    private static final String DONATIONS_FILE = "data\\data_donations.txt";
 
     public PartySystem(){
         centralCommittee = new CentralCommittee("National Central Committee");
@@ -306,6 +307,7 @@ public class PartySystem{
         try {
             File membersFile = new File(MEMBERS_FILE);
             File pendingFile = new File(PENDING_FILE);
+            File donationsFile = new File(DONATIONS_FILE);
             File parent = membersFile.getParentFile();
             if (parent != null) {
                 parent.mkdirs();
@@ -372,6 +374,9 @@ public class PartySystem{
                     out.print(member.getCommitteeLevel().name()); out.println();
                 }
             }
+            try(PrintWriter out = new PrintWriter(donationsFile)){
+                out.print(centralCommittee.getTotalDonations());
+            }
         } catch (IOException e) {
             System.out.println("Save failed: " + e.getMessage());
         }
@@ -388,82 +393,98 @@ public class PartySystem{
         }
         pendingApplications.clear();
 
-        if(true){
-                File file = new File(MEMBERS_FILE);
-                try (Scanner scanner = new Scanner(file)) {
-                    while (scanner.hasNextLine()) {
-                        String line = scanner.nextLine();
-                        if (line.isBlank()) continue;
-                        String[] p = line.split(",", -1);
-                        if (p.length < 14) continue;
-                        try {
-                            String nid = p[0];
-                            String name = p[1];
-                            String email = p[2];
-                            String phone = p[3];
-                            String password = p[4];
-                            String profession = p[5];
-                            double yearlyIncome = Double.parseDouble(p[6]);
-                            double donation = Double.parseDouble(p[7]);
-                            boolean hasDonated = Boolean.parseBoolean(p[8]);
-                            boolean approved = Boolean.parseBoolean(p[9]);
-                            Division division = Division.valueOf(p[10]);
-                            District district = District.valueOf(p[11]);
-                            Role role = Role.valueOf(p[12]);
-                            CommitteeLevel cl = CommitteeLevel.valueOf(p[13]);
-                            Member member = new Member(nid, name, email, phone, password, profession, yearlyIncome, donation, hasDonated, approved, new Address(district), role, cl);
-                            if (approved) {
-                                switch (cl) {
-                                    case CENTRAL -> centralCommittee.addLeader(member);
-                                    case DIVISIONAL -> getDivisionalCommittee(division).addLeader(member);
-                                    case DISTRICT -> {
-                                        if (role == Role.MEMBER) {
-                                            getDistrictCommittee(district).addMember(member);
-                                        } else {
-                                            getDistrictCommittee(district).addLeader(member);
-                                        }
-                                    }
+        File membersFile = new File(MEMBERS_FILE);
+        try (Scanner scanner = new Scanner(membersFile)) {
+            while (scanner.hasNextLine()) {
+                String line = scanner.nextLine();
+                if (line.isBlank()) {
+                    continue;
+                }
+                String[] p = line.split(",", -1);
+                if (p.length < 14) {
+                    continue;
+                }
+                try {
+                    String nid = p[0];
+                    String name = p[1];
+                    String email = p[2];
+                    String phone = p[3];
+                    String password = p[4];
+                    String profession = p[5];
+                    double yearlyIncome = Double.parseDouble(p[6]);
+                    double donation = Double.parseDouble(p[7]);
+                    boolean hasDonated = Boolean.parseBoolean(p[8]);
+                    boolean approved = Boolean.parseBoolean(p[9]);
+                    Division division = Division.valueOf(p[10]);
+                    District district = District.valueOf(p[11]);
+                    Role role = Role.valueOf(p[12]);
+                    CommitteeLevel cl = CommitteeLevel.valueOf(p[13]);
+                    Member member = new Member(nid, name, email, phone, password, profession, yearlyIncome, donation, hasDonated, approved, new Address(district), role, cl);
+                    if (approved) {
+                        switch (cl) {
+                            case CENTRAL ->
+                                centralCommittee.addLeader(member);
+                            case DIVISIONAL ->
+                                getDivisionalCommittee(division).addLeader(member);
+                            case DISTRICT -> {
+                                if (role == Role.MEMBER) {
+                                    getDistrictCommittee(district).addMember(member);
+                                } else {
+                                    getDistrictCommittee(district).addLeader(member);
                                 }
                             }
-                        } catch (Exception e) {
-                            System.out.println("Harye Genjan!File load e genjan hoise! oida kintu Party System e!");
                         }
                     }
+                } catch (Exception e) {
+                    System.out.println("Harye Genjan!File load e genjan hoise! oida kintu Party System e!");
                 }
+            }
         }
-        if(true){
-                File file = new File(PENDING_FILE);
-                try (Scanner scanner = new Scanner(file)) {
-                    while (scanner.hasNextLine()) {
-                        String line = scanner.nextLine();
-                        if (line.isBlank()) continue;
-                        String[] p = line.split(",", -1);
-                        if (p.length < 14) continue;
-                        try {
-                            String nid = p[0];
-                            String name = p[1];
-                            String email = p[2];
-                            String phone = p[3];
-                            String password = p[4];
-                            String profession = p[5];
-                            double yearlyIncome = Double.parseDouble(p[6]);
-                            double donation = Double.parseDouble(p[7]);
-                            boolean hasDonated = Boolean.parseBoolean(p[8]);
-                            boolean approved = Boolean.parseBoolean(p[9]);
-                            Division division = Division.valueOf(p[10]);
-                            District district = District.valueOf(p[11]);
-                            Role role = Role.valueOf(p[12]);
-                            CommitteeLevel cl = CommitteeLevel.valueOf(p[13]);
-                            Member member = new Member(nid, name, email, phone, password, profession, yearlyIncome, donation, hasDonated, approved, new Address(district), role, cl);
-                            if (!approved) {
-                                pendingApplications.add(member);
-                            }
-                        } catch (Exception e) {
-                            System.out.println("Harye Genjan!File load e genjan hoise! oida kintu Party System e!");
-                        }
+
+        File pendingFile = new File(PENDING_FILE);
+        try (Scanner scanner = new Scanner(pendingFile)) {
+            while (scanner.hasNextLine()) {
+                String line = scanner.nextLine();
+                if (line.isBlank()) {
+                    continue;
+                }
+                String[] p = line.split(",", -1);
+                if (p.length < 14) {
+                    continue;
+                }
+                try {
+                    String nid = p[0];
+                    String name = p[1];
+                    String email = p[2];
+                    String phone = p[3];
+                    String password = p[4];
+                    String profession = p[5];
+                    double yearlyIncome = Double.parseDouble(p[6]);
+                    double donation = Double.parseDouble(p[7]);
+                    boolean hasDonated = Boolean.parseBoolean(p[8]);
+                    boolean approved = Boolean.parseBoolean(p[9]);
+                    Division division = Division.valueOf(p[10]);
+                    District district = District.valueOf(p[11]);
+                    Role role = Role.valueOf(p[12]);
+                    CommitteeLevel cl = CommitteeLevel.valueOf(p[13]);
+                    Member member = new Member(nid, name, email, phone, password, profession, yearlyIncome, donation, hasDonated, approved, new Address(district), role, cl);
+                    if (!approved) {
+                        pendingApplications.add(member);
                     }
+                } catch (Exception e) {
+                    System.out.println("Harye Genjan!File load e genjan hoise! oida kintu Party System e!");
                 }
+            }
         }
+        File donatinosFile = new File(DONATIONS_FILE);
+        try(Scanner scanner = new Scanner(donatinosFile)){
+            double donations = scanner.nextDouble();
+            centralCommittee.setTotalDonations(donations);
+        }
+        catch(Exception e){
+            System.out.println("Donations file e loading e genjam hoise!");
+        }
+
     }
 
 }

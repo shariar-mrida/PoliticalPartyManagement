@@ -19,7 +19,7 @@ public class CentralCommittee extends Committee implements CommitteeOperations {
         this.divisional = new ArrayList<>();
         this.centralCommitteeLeader = new ArrayList<>();
         this.election = new Election(this);
-        this.donations = 0.0;
+        this.donations = 0;
     }
 
     public void addDivisional(DivisionalCommittee d) {
@@ -78,6 +78,9 @@ public class CentralCommittee extends Committee implements CommitteeOperations {
         return donations;
     }
 
+    public void setTotalDonations(double donations){
+        this.donations=donations;
+    }
     @Override
     public void displayInfo() {
         centralCommitteeLeader.sort(null);
