@@ -31,9 +31,9 @@ public class MainGUI {
     }
 
     private void init() {
-        frame = new JFrame("Political Party Management System (Swing)");
+        frame = new JFrame("Political Party Management System");
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        frame.setSize(900, 600);
+        frame.setSize(1100, 550);
         frame.setLocationRelativeTo(null);
         frame.setMinimumSize(new Dimension(800, 500));
 
@@ -338,6 +338,7 @@ public class MainGUI {
             btn("Stop Election", () -> stopElection());
             btn("Vote", () -> vote());
             btn("Donations", () -> donations());
+            btn("Donate 5%", () -> donate());
             btn("Approve Member", () -> approveMember());
             btn("Terminate Member", () -> terminateMember());
             btn("Apply Leadership", () -> applyLeadership());
