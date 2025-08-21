@@ -49,7 +49,7 @@ public class MainGUI {
         memberPanel = new MemberPanel();
         leaderPanel = new LeaderPanel();
         adminPanel = new AdminPanel();
-
+    
         cards.add(startPanel, "START");
         cards.add(applyPanel, "APPLY");
         cards.add(loginPanel, "LOGIN");
