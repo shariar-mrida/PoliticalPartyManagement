@@ -31,11 +31,13 @@ public class MainGUI {
     }
 
     private void init() {
+        ImageIcon image = new ImageIcon(getClass().getResource("/ui/ppm.png"));
         frame = new JFrame("Political Party Management System");
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         frame.setSize(1100, 550);
         frame.setLocationRelativeTo(null);
-        frame.setMinimumSize(new Dimension(800, 500));
+        frame.setMinimumSize(new Dimension(800, 400));
+        frame.setIconImage(image.getImage());
 
         card = new CardLayout();
         cards = new JPanel(card);
