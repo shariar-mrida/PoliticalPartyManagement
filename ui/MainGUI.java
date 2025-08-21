@@ -2,6 +2,7 @@ package ui;
 
 import committees.*;
 import java.awt.*;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -384,7 +385,8 @@ public class MainGUI {
             JOptionPane.showMessageDialog(frame, "Only central president can see");
             return;
         }
-        JOptionPane.showMessageDialog(frame, "Donations : "+system.getDonations());
+        BigDecimal bd = new BigDecimal(system.getDonations());
+        JOptionPane.showMessageDialog(frame, "Donations : "+bd.toPlainString());
     }
     
     private void donate() {
@@ -456,26 +458,6 @@ public class MainGUI {
             return;
         }
         CommitteeLevel targetLevel = chooseCommitteeLevel();
-        // if (targetLevel == null) {
-        //     return;
-        // }
-        // Division division = null;
-        // District district = null;
-        // if (targetLevel == CommitteeLevel.DIVISIONAL) {
-        //     division = chooseDivision();
-        //     if (division == null) {
-        //         return;
-        //     }
-        // } else if (targetLevel == CommitteeLevel.DISTRICT) {
-        //     division = chooseDivision();
-        //     if (division == null) {
-        //         return;
-        //     }
-        //     district = chooseDistrictInDivision(division);
-        //     if (district == null) {
-        //         return;
-        //     }
-        // }
         boolean ok = system.applyForLeadership(currentUser, role, targetLevel);
         JOptionPane.showMessageDialog(frame, ok ? "Registered as candidate" : "Failed to register");
     }
