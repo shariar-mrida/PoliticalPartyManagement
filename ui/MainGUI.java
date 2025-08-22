@@ -647,6 +647,10 @@ public class MainGUI {
     }
 
     private void promote() {
+        if(currentUser.getRole()!=Role.ADMIN && currentUser.getRole()!=Role.PRESIDENT && currentUser.getCommitteeLevel()!=CommitteeLevel.CENTRAL){
+            JOptionPane.showMessageDialog(frame, "Only admins or presidents can promote");
+            return;
+        }
         String nid = JOptionPane.showInputDialog(frame, "Member National ID:");
         if (nid == null) {
             return;
@@ -676,6 +680,10 @@ public class MainGUI {
     }
 
     private void demote() {
+        if(currentUser.getRole()!=Role.ADMIN && currentUser.getRole()!=Role.PRESIDENT && currentUser.getCommitteeLevel()!=CommitteeLevel.CENTRAL){
+            JOptionPane.showMessageDialog(frame, "Only admins or presidents can promote");
+            return;
+        }
         String email = JOptionPane.showInputDialog(frame, "Leader Email:");
         if (email == null) {
             return;
